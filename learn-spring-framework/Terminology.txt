@@ -5,3 +5,4 @@ Dependency Injection - Identify beans, their dependencies, and wire together
 IOC = Inversion of Control = Dependency Injection
 Spring Beans = An object managed by Spring Framework
 Autowiring - process of wiring in dependencies for a Spring Bean
+Maven - Spring Build Tool
