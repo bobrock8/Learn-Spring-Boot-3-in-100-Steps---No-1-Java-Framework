@@ -1,5 +1,8 @@
 package com.aleksandarilic.learnspringframework.game;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class SuperContraGame implements Game{
     public void up() {
         System.out.println("SuperContraGame up");
