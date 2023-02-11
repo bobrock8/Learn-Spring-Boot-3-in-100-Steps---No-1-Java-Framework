@@ -1,0 +1,7 @@
+@Component - Class managed by Spring framework
+Dependency - Something we need as the instance of other class
+@Component Scan - SpringBootApplication does @ComponentScan of default package
+Dependency Injection - Identify beans, their dependencies, and wire together
+IOC = Inversion of Control = Dependency Injection
+Spring Beans = An object managed by Spring Framework
+Autowiring - process of wiring in dependencies for a Spring Bean
