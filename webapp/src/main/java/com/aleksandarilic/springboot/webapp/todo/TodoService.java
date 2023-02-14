@@ -10,31 +10,32 @@ import java.util.List;
 public class TodoService {
 
     private static List<Todo> todos = new ArrayList<>();
+    private static int todosCount = 0;
 
     static {
         todos.add(new Todo(
-            1,
+            ++todosCount,
             "in28minutes",
             "Learn AWS",
             LocalDate.now().plusYears(4),
             false
         ));
         todos.add(new Todo(
-                2,
+                ++todosCount,
                 "in28minutes",
                 "Learn React",
                 LocalDate.now().plusYears(1),
                 false
         ));
         todos.add(new Todo(
-                3,
+                ++todosCount,
                 "in28minutes",
                 "Learn Spring Boot",
                 LocalDate.now().plusYears(3),
                 false
         ));
         todos.add(new Todo(
-                4,
+                ++todosCount,
                 "in28minutes",
                 "Learn Typescript",
                 LocalDate.now().plusYears(2),
@@ -44,5 +45,15 @@ public class TodoService {
 
     public List<Todo> findByUsername(String username) {
         return todos;
+    }
+
+    public void addTodo(String username, String description, LocalDate targetData, boolean done){
+        todos.add(new Todo(
+                ++todosCount,
+                username,
+                description,
+                targetData,
+                done
+        ));
     }
 }
