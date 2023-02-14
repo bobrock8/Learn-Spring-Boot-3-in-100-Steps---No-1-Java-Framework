@@ -12,5 +12,6 @@
             <input id="password" type="password" name="password">
             <input type="submit" name="submit" id="submit">
         </form>
+        <pre>${errorMessage}</pre>
     </body>
 </html>
