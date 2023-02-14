@@ -9,6 +9,7 @@
     <body>
         <h1>Welcome ${name}</h1>
         <hr>
+
         <h2>List of your Todos</h2>
         <p>${todos}</p>
         <table>
