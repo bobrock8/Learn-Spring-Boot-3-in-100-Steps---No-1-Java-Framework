@@ -3,6 +3,8 @@ package com.aleksandarilic.springboot.webapp.todo;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -25,19 +27,18 @@ public class TodoController {
     }
 
     @RequestMapping(value = "list-todos")
-    public String getTodoPage(ModelMap modelMap) {
-        var todos = todoService.findByUsername("Aca");
-        modelMap.put("todos", todos);
+    public String getTodoPage(ModelMap model) {
+        var todos = todoService.findByUsername(getUsername());
+        model.put("todos", todos);
         logger.info(String.valueOf(todos));
         return "list-todos";
     }
 
     @RequestMapping(value = "add-todo", method = RequestMethod.GET)
     public String showTodoPage(ModelMap model) {
-        String username = (String)model.get("name");
         Todo todo = new Todo(
                 0,
-                username,
+                getUsername(),
                 "Default Description",
                 LocalDate.now().plusYears(1),
                 false
@@ -53,9 +54,8 @@ public class TodoController {
             return "add-todo";
         }
 
-        String username = (String)model.get("name");
         todoService.addTodo(
-                username,
+                getUsername(),
                 todo.getDescription(),
                 todo.getTargetDate(),
                 false
@@ -83,9 +83,13 @@ public class TodoController {
             return "add-todo";
         }
 
-        String username = (String)model.get("name");
-        todo.setUsername(username);
+        todo.setUsername(getUsername());
         todoService.updateTodo(todo);
         return "redirect:list-todos";
+    }
+
+    public String getUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 }

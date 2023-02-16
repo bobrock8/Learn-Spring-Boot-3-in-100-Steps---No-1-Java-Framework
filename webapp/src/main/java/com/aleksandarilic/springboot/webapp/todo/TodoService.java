@@ -17,28 +17,28 @@ public class TodoService {
     static {
         todos.add(new Todo(
             ++todosCount,
-            "in28minutes",
+            "bobrock8",
             "Learn AWS",
             LocalDate.now().plusYears(4),
             false
         ));
         todos.add(new Todo(
                 ++todosCount,
-                "in28minutes",
+                "bobrock8",
                 "Learn React",
                 LocalDate.now().plusYears(1),
                 false
         ));
         todos.add(new Todo(
                 ++todosCount,
-                "in28minutes",
+                "bobrock8",
                 "Learn Spring Boot",
                 LocalDate.now().plusYears(3),
                 false
         ));
         todos.add(new Todo(
                 ++todosCount,
-                "in28minutes",
+                "bobrock8",
                 "Learn Typescript",
                 LocalDate.now().plusYears(2),
                 false
@@ -46,7 +46,9 @@ public class TodoService {
     }
 
     public List<Todo> findByUsername(String username) {
-        return todos;
+        Predicate<? super Todo> predicate
+                = todo -> todo.getUsername().equalsIgnoreCase(username);
+        return todos.stream().filter(predicate).toList();
     }
 
     public void addTodo(String username, String description, LocalDate targetData, boolean done){
