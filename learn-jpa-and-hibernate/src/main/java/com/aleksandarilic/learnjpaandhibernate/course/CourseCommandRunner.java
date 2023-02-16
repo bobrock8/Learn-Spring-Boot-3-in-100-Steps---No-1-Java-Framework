@@ -1,15 +1,18 @@
-package com.aleksandarilic.learnjpaandhibernate.course.jdbc;
+package com.aleksandarilic.learnjpaandhibernate.course;
 
-import com.aleksandarilic.learnjpaandhibernate.course.Course;
+import com.aleksandarilic.learnjpaandhibernate.course.jpa.CourseJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JdbcCommandRunner implements CommandLineRunner {
+public class CourseCommandRunner implements CommandLineRunner {
+
+    //@Autowired
+    //private CourseJdbcRepository repository;
 
     @Autowired
-    private CreateJdbcRepository repository;
+    private CourseJpaRepository repository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -29,6 +32,5 @@ public class JdbcCommandRunner implements CommandLineRunner {
 
         System.out.println(repository.findById(1));
         System.out.println(repository.findById(3));
-        System.out.println(repository.findAll());
     }
 }
