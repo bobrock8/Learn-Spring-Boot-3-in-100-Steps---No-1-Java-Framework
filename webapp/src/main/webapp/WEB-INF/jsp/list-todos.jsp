@@ -1,14 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-
-<html>
-    <head>
-        <link rel="stylesheet" href="webjars/bootstrap/5.2.3/css/bootstrap.min.css">
-        <link rel="stylesheet" href="webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css">
-        <title>List of Todos</title>
-    </head>
-
-    <body>
+<%@ include file="common/header.jspf" %>
+<%@ include file="common/navigation.jspf" %>
         <div class="container">
             <h1>Welcome ${name}</h1>
             <hr>
@@ -37,15 +28,4 @@
             </table>
             <a href="add-todo" class="btn btn-success">Add Todo</a>
         </div>
-        <script src="webjars/jquery/3.6.3/jquery.min.js"></script>
-        <script src="webjars/bootstrap/5.2.3/js/bootstrap.min.js"></script>
-        <script src="webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
-        <script type="text/javascript">
-        $('#targetDate').datepicker({
-            format: 'yyyy-mm-dd',
-        });
-        </script>
-
-    </body>
-</html>
+<%@ include file="common/footer.jspf" %>
