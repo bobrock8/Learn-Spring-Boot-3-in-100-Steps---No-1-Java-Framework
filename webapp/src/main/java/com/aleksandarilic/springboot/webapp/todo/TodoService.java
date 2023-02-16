@@ -1,5 +1,6 @@
 package com.aleksandarilic.springboot.webapp.todo;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -60,5 +61,18 @@ public class TodoService {
 
     public void deleteById(int id) {
         todos.removeIf(todo -> todo.getId() == id);
+    }
+
+    public Todo findById(int id) {
+        Predicate<? super Todo> predicate
+                = todo -> todo.getId() == id;
+        Todo todo = todos.stream().filter(predicate).findFirst().get();
+        return todo;
+    }
+
+    public void updateTodo(@Valid Todo todo) {
+        // first way
+        deleteById(todo.getId());
+        todos.add(todo);
     }
 }
