@@ -18,14 +18,10 @@ import java.time.LocalDate;
 @Controller
 @SessionAttributes("name")
 public class TodoControllerJpa {
-
-    private TodoService todoService;
     private TodoRepository todoRepository;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    public TodoControllerJpa(TodoService todoService, TodoRepository todoRepository) {
-
-        this.todoService = todoService;
+    public TodoControllerJpa(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
 
     }
@@ -57,25 +53,20 @@ public class TodoControllerJpa {
         if (result.hasErrors()) {
             return "add-todo";
         }
-
-        todoService.addTodo(
-                getUsername(),
-                todo.getDescription(),
-                todo.getTargetDate(),
-                false
-        );
+        todo.setUsername(getUsername());
+        todoRepository.save(todo);
         return "redirect:list-todos";
     }
 
     @RequestMapping(value = "delete-todo")
     public String deleteTodo(@RequestParam int id) {
-        todoService.deleteById(id);
+        todoRepository.deleteById(id);
         return "redirect:list-todos";
     }
 
     @RequestMapping(value = "update-todo", method = RequestMethod.GET)
     public String updateTodo(@RequestParam int id, ModelMap model) {
-        Todo todo = todoService.findById(id);
+        Todo todo = todoRepository.findById(id).get();
         model.addAttribute("todo", todo);
         return "add-todo";
     }
@@ -88,7 +79,7 @@ public class TodoControllerJpa {
         }
 
         todo.setUsername(getUsername());
-        todoService.updateTodo(todo);
+        todoRepository.save(todo);
         return "redirect:list-todos";
     }
 
