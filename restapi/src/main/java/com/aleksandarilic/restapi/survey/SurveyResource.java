@@ -1,11 +1,12 @@
 package com.aleksandarilic.restapi.survey;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -64,5 +65,34 @@ public class SurveyResource {
 
         return question;
     }
+
+    @RequestMapping(path = "surveys/{surveyId}/questions", method = RequestMethod.POST)
+    public ResponseEntity<Object> addNewSurveyQuestion(
+            @PathVariable String surveyId,
+            @RequestBody Question question
+    ) {
+
+        String questionId = surveyService.addNewSurveyQuestion(surveyId, question);
+
+        URI location =
+                ServletUriComponentsBuilder.fromCurrentRequest().
+                        path("/{questionId}").
+                        buildAndExpand(questionId).toUri();
+
+        return ResponseEntity.created(location).build();
+
+    }
+
+//    {
+//        "id": "SOME_ID",
+//            "description": "Your Favorite Cloud Platform",
+//            "options": [
+//        "AWS",
+//                "Azure",
+//                "Google Cloud",
+//                "Oracle Cloud"
+//    ],
+//        "correctAnswer": "Google Cloud"
+//    }
 
 }
