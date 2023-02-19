@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.time.LocalDate;
 
-//@Controller
+@Controller
 @SessionAttributes("name")
-public class TodoController {
-
-    private TodoService todoService;
+public class TodoControllerJpa {
+    private TodoRepository todoRepository;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    public TodoController(TodoService todoService) {
-        this.todoService = todoService;
+    public TodoControllerJpa(TodoRepository todoRepository) {
+        this.todoRepository = todoRepository;
+
     }
 
     @RequestMapping(value = "list-todos")
     public String getTodoPage(ModelMap model) {
-        var todos = todoService.findByUsername(getUsername());
+        var todos = todoRepository.findByUsername(getUsername());
         model.put("todos", todos);
         logger.info(String.valueOf(todos));
         return "list-todos";
@@ -53,25 +53,20 @@ public class TodoController {
         if (result.hasErrors()) {
             return "add-todo";
         }
-
-        todoService.addTodo(
-                getUsername(),
-                todo.getDescription(),
-                todo.getTargetDate(),
-                false
-        );
+        todo.setUsername(getUsername());
+        todoRepository.save(todo);
         return "redirect:list-todos";
     }
 
     @RequestMapping(value = "delete-todo")
     public String deleteTodo(@RequestParam int id) {
-        todoService.deleteById(id);
+        todoRepository.deleteById(id);
         return "redirect:list-todos";
     }
 
     @RequestMapping(value = "update-todo", method = RequestMethod.GET)
     public String updateTodo(@RequestParam int id, ModelMap model) {
-        Todo todo = todoService.findById(id);
+        Todo todo = todoRepository.findById(id).get();
         model.addAttribute("todo", todo);
         return "add-todo";
     }
@@ -84,7 +79,7 @@ public class TodoController {
         }
 
         todo.setUsername(getUsername());
-        todoService.updateTodo(todo);
+        todoRepository.save(todo);
         return "redirect:list-todos";
     }
 
