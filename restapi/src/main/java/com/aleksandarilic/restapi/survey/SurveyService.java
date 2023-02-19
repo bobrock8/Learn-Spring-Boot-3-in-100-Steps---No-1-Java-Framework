@@ -68,4 +68,12 @@ public class SurveyService {
 
         return survey.getQuestions().removeIf(question -> Objects.equals(question.getId(), questionId));
     }
+
+    public void updateSurveyQuestion(String surveyId, String questionId, Question question) {
+        Survey survey = getSurveyById(surveyId);
+        List<Question> questions = survey.getQuestions();
+        questions.removeIf(q -> Objects.equals(q.getId(), questionId));
+        questions.add(question);
+
+    }
 }

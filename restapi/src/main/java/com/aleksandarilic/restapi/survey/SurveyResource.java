@@ -102,6 +102,18 @@ public class SurveyResource {
        return ResponseEntity.noContent().build();
     }
 
+    //PUT
+    @RequestMapping(name = "Update questions by Id", path = "surveys/{surveyId}/questions/{questionId}", method = RequestMethod.PUT)
+    public ResponseEntity<Object> updateQuestionById(
+            @PathVariable String surveyId,
+            @PathVariable String questionId,
+            @RequestBody Question question
+    ) {
+
+        surveyService.updateSurveyQuestion(surveyId, questionId,question);
+        return ResponseEntity.noContent().build();
+    }
+
 //    {
 //        "id": "SOME_ID",
 //            "description": "Your Favorite Cloud Platform",
