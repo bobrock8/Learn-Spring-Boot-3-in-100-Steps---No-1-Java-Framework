@@ -18,6 +18,8 @@ public class SurveyResource {
         this.surveyService = surveyService;
     }
 
+
+    //GET
     @RequestMapping(name = "Retrieve all surveys", path = "surveys")
     public List<Survey> retrieveAllSurveys() {
         return SurveyService.getSurveys();
@@ -66,6 +68,8 @@ public class SurveyResource {
         return question;
     }
 
+    // POST
+
     @RequestMapping(path = "surveys/{surveyId}/questions", method = RequestMethod.POST)
     public ResponseEntity<Object> addNewSurveyQuestion(
             @PathVariable String surveyId,
@@ -81,6 +85,21 @@ public class SurveyResource {
 
         return ResponseEntity.created(location).build();
 
+    }
+
+    // DELETE
+    @RequestMapping(name = "Delete questions by Id", path = "surveys/{surveyId}/questions/{questionId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteQuestionById(
+            @PathVariable String surveyId,
+            @PathVariable String questionId
+    ) {
+
+        Survey survey =  surveyService.getSurveyById(surveyId);
+        if(survey == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+       surveyService.deleteQuestionById(survey, questionId);
+       return ResponseEntity.noContent().build();
     }
 
 //    {

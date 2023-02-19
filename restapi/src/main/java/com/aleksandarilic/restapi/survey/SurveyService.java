@@ -62,4 +62,10 @@ public class SurveyService {
         survey.getQuestions().add(question);
         return question.getId();
     }
+
+    public boolean deleteQuestionById(Survey survey, String questionId) {
+        if(survey.getQuestions().isEmpty()) return false;
+
+        return survey.getQuestions().removeIf(question -> Objects.equals(question.getId(), questionId));
+    }
 }
