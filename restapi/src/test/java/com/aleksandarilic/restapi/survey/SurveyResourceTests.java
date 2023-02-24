@@ -12,6 +12,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +44,13 @@ class SurveyResourceTests {
 
 	@Test
 	void getSurveyQuestion() throws JSONException {
-		ResponseEntity<String> responseEntity = template.getForEntity(QUESTION_1, String.class);
+
+		HttpEntity<String> httpEntity = new HttpEntity<>(null, createHttpHeaders());
+
+		ResponseEntity<String> responseEntity
+				= template.exchange(QUESTION_1, HttpMethod.GET, httpEntity, String.class);
+
+		// ResponseEntity<String> responseEntity = template.getForEntity(QUESTION_1, String.class);
 //		[Content-Type:"application/json", Transfer-Encoding:"chunked", Date:"Sun, 19 Feb 2023 17:44:56 GMT", Keep-Alive:"timeout=60", Connection:"keep-alive"]
 //		{"id":"Question1","description":"Most Popular Cloud Platform Today","options":["AWS","Azure","Google Cloud","Oracle Cloud"],"correctAnswer":"AWS"}
 
@@ -73,10 +81,8 @@ class SurveyResourceTests {
 					"correctAnswer": "Google Cloud"
 				}
 			""";
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", "application/json");
 
-		HttpEntity<String> httpEntity = new HttpEntity<>(body, headers);
+		HttpEntity<String> httpEntity = new HttpEntity<>(body, createHttpHeaders());
 
 		ResponseEntity<String> responseEntity
 				= template.exchange(DEFAULT_QUESTION_URL, HttpMethod.POST, httpEntity, String.class);
@@ -84,6 +90,20 @@ class SurveyResourceTests {
 		assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
 		assertTrue(responseEntity.getHeaders().get("Location").get(0).contains("/surveys/Survey1/questions/"));
 
+	}
+
+	private String performingBasicAuthEncoding(String user, String pass) {
+		String combined = user + ":" + pass;
+		byte[] encodedBytes =
+				Base64.getEncoder().encode(combined.getBytes(StandardCharsets.UTF_8));
+		return new String(encodedBytes);
+	}
+
+	private HttpHeaders createHttpHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json");
+		headers.add("Authorization", "Basic " + performingBasicAuthEncoding("admin", "123"));
+		return headers;
 	}
 
 }
