@@ -19,6 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = SurveyResource.class)
@@ -34,6 +35,9 @@ class SurveyResourceMVCTests {
 
     private static final String SPECIFIC_QUESTION_URL =
             "http://localhost:8080/surveys/Survey1/questions/Question1";
+
+    private static final String DEFAULT_QUESTION_URL =
+            "http://localhost:8080/surveys/Survey1/questions";
 
     // MOCK -> retrieveQuestionById
     // fire a request /surveys/{surveyId}/questions/{questionId}
@@ -89,5 +93,53 @@ class SurveyResourceMVCTests {
                 true
         );
     }
+
+    @Test
+    void test_addNewSurveyQuestion() throws Exception {
+
+
+
+        //addNewSurveyQuestion
+        // POST
+        // body
+        // url http://localhost:8080/surveys/Survey1/questions
+        // 201
+        // location header
+
+        // GET
+        String questionID = "123456789";
+        String requestBody = """
+                   {
+                            "description": "Fastest Growing Cloud Platform",
+                            "options": [
+                                "AWS",
+                                "Azure",
+                                "Google Cloud",
+                                "Oracle Cloud"
+                            ],
+                        "correctAnswer": "Google Cloud"
+                    }
+                """;
+        String location = "http://localhost:8080/surveys/Survey1/questions/" + questionID;
+
+        RequestBuilder requestBuilder =
+                MockMvcRequestBuilders.post(DEFAULT_QUESTION_URL)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON);
+
+        // WHEN
+        when(surveyService.addNewSurveyQuestion(anyString(), any())).thenReturn(questionID);
+        MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
+
+        // THEN
+        System.out.println(mvcResult.getResponse().getHeader("Location"));
+
+        assertEquals(201, mvcResult.getResponse().getStatus());
+        assertEquals(location, mvcResult.getResponse().getHeader("Location"));
+
+
+    }
+
 
 }
